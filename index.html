@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla ICM USM 2025 - Diseño Moderno</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .aprobado { background-color: #a4f5a4; color: #000; }
+    .desbloqueado { background-color: #aee0f8; color: #000; }
+    .bloqueado { background-color: #e5e5e5; color: #000; }
+  </style>
+</head>
+<body class="bg-gray-100 p-6">
+  <main>
+    <h1 class="text-3xl font-bold mb-6 text-blue-800">Malla Ingeniería Civil Matemática – USM 2025</h1>
+
+    <div class="mb-6 flex gap-6 items-center">
+      <div><span class="inline-block w-4 h-4 bg-[#a4f5a4] mr-2"></span>Aprobado</div>
+      <div><span class="inline-block w-4 h-4 bg-[#aee0f8] mr-2"></span>Desbloqueado</div>
+      <div><span class="inline-block w-4 h-4 bg-[#e5e5e5] mr-2"></span>Bloqueado</div>
+    </div>
+
+    <button onclick="resetearMalla()" class="mb-6 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+      Reiniciar Malla
+    </button>
+
+    <div id="malla" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+  </main>
+
+  <script>
+    const semestres = {
+      1: [
+        {sigla: "HCW101", nombre: "Inglés 1", estado: "desbloqueado"},
+        {sigla: "EFI200", nombre: "Educación Física 1", estado: "desbloqueado"},
+        {sigla: "IWG400", nombre: "Proyecto Inicial", estado: "desbloqueado"},
+        {sigla: "FIS100", nombre: "Introducción a la Física", estado: "desbloqueado"},
+        {sigla: "MAT070", nombre: "Introducción al Cálculo", estado: "desbloqueado"},
+        {sigla: "MAT060", nombre: "Álgebra y Geometría", estado: "desbloqueado"},
+      ],
+      2: [
+        {sigla: "HCW102", nombre: "Inglés 2", estado: "bloqueado"},
+        {sigla: "EFI201", nombre: "Educación Física 2", estado: "bloqueado"},
+        {sigla: "IWI401", nombre: "Introducción a la Programación", estado: "desbloqueado"},
+        {sigla: "FIS101", nombre: "Física General – Mecánica", estado: "bloqueado"},
+        {sigla: "MAT071", nombre: "Cálculo en una Variable", estado: "bloqueado"},
+        {sigla: "MAT061", nombre: "Álgebra Lineal", estado: "bloqueado"},
+      ],
+      3: [
+        {sigla: "HCW103", nombre: "Inglés 3", estado: "bloqueado"},
+        {sigla: "MAT201", nombre: "Introducción a la Matemática Avanzada", estado: "bloqueado"},
+        {sigla: "FIS102", nombre: "Calor y Ondas", estado: "bloqueado"},
+        {sigla: "MAT072", nombre: "Cálculo de Varias Variables", estado: "bloqueado"},
+        {sigla: "EDE101", nombre: "Ecuaciones Diferenciales Elementales", estado: "bloqueado"},
+        {sigla: "PROG201", nombre: "Programación Avanzada en Ciencias", estado: "bloqueado"},
+      ],
+      4: [
+        {sigla: "ESP101", nombre: "Comunicación Efectiva en Español", estado: "bloqueado"},
+        {sigla: "MAT301", nombre: "Análisis Real", estado: "bloqueado"},
+        {sigla: "MAT302", nombre: "Álgebra Lineal Avanzada", estado: "bloqueado"},
+        {sigla: "MAT303", nombre: "Cálculo Avanzado para Ingeniería", estado: "bloqueado"},
+        {sigla: "FIS201", nombre: "Electricidad y Magnetismo", estado: "bloqueado"},
+        {sigla: "EST101", nombre: "Probabilidad y Estadística", estado: "bloqueado"},
+      ],
+      5: [
+        {sigla: "ADM101", nombre: "Administración y Sostenibilidad Organizacional", estado: "bloqueado"},
+        {sigla: "MAT401", nombre: "Análisis", estado: "bloqueado"},
+        {sigla: "EDE201", nombre: "Ecuaciones Diferenciales y Sistemas Dinámicos", estado: "bloqueado"},
+        {sigla: "MAT402", nombre: "Álgebra y Matemática Discreta", estado: "bloqueado"},
+        {sigla: "OPT101", nombre: "Optimización Lineal", estado: "bloqueado"},
+        {sigla: "COMU201", nombre: "Práctica en Acción Comunitaria", estado: "bloqueado"},
+      ],
+      6: [
+        {sigla: "ESP201", nombre: "Comunicación Efectiva", estado: "bloqueado"},
+        {sigla: "ECO201", nombre: "Ingeniería Económica", estado: "bloqueado"},
+        {sigla: "ANI101", nombre: "Análisis Numérico", estado: "bloqueado"},
+        {sigla: "EST201", nombre: "Modelamiento Estadístico", estado: "bloqueado"},
+        {sigla: "MED101", nombre: "Teoría de la Medida", estado: "bloqueado"},
+        {sigla: "OPT201", nombre: "Optimización No Lineal", estado: "bloqueado"},
+      ],
+      7: [
+        {sigla: "HCW401", nombre: "Inglés Disciplinar", estado: "bloqueado"},
+        {sigla: "PROY101", nombre: "Gestión de Preferencias de Proyectos", estado: "bloqueado"},
+        {sigla: "ANI201", nombre: "Análisis Numérico 2", estado: "bloqueado"},
+        {sigla: "MAT501", nombre: "Análisis Funcional", estado: "bloqueado"},
+        {sigla: "LAB101", nombre: "Laboratorio de Modelación 1", estado: "bloqueado"},
+        {sigla: "DAD101", nombre: "Análisis y Ciencia de Datos", estado: "bloqueado"},
+      ],
+      8: [
+        {sigla: "EDP101", nombre: "Ecuaciones Diferenciales Parciales", estado: "bloqueado"},
+        {sigla: "ANI301", nombre: "Análisis Numérico de EDP", estado: "bloqueado"},
+        {sigla: "EST301", nombre: "Inferencia Estadística", estado: "bloqueado"},
+        {sigla: "OPT301", nombre: "Optimización y Control", estado: "bloqueado"},
+        {sigla: "LAB201", nombre: "Laboratorio de Modelación 2", estado: "bloqueado"},
+      ],
+      9: [
+        {sigla: "ELEC1", nombre: "Electivo 1", estado: "bloqueado"},
+        {sigla: "PROY102", nombre: "Gestión de Preferencias de Innovación", estado: "bloqueado"},
+        {sigla: "ELEC2", nombre: "Electivo 2", estado: "bloqueado"},
+        {sigla: "ELEC3", nombre: "Electivo 3", estado: "bloqueado"},
+        {sigla: "TIT1", nombre: "Proyecto de Titulación – Parte 1", estado: "bloqueado"},
+      ],
+      10: [
+        {sigla: "ELEC4", nombre: "Electivo 4", estado: "bloqueado"},
+        {sigla: "EMP101", nombre: "Gestión de Emprendimiento", estado: "bloqueado"},
+        {sigla: "ELEC5", nombre: "Electivo 5", estado: "bloqueado"},
+        {sigla: "ELEC6", nombre: "Electivo 6", estado: "bloqueado"},
+        {sigla: "TIT2", nombre: "Proyecto de Titulación – Parte 2", estado: "bloqueado"},
+      ],
+    };
+
+    const estados = ["desbloqueado", "aprobado", "bloqueado"];
+    const simbolos = {
+      "desbloqueado": "🟦",
+      "aprobado": "🟩",
+      "bloqueado": "⚪️"
+    };
+
+    function cargarEstado(sigla, defaultEstado) {
+      return localStorage.getItem(`malla-${sigla}`) ?? defaultEstado;
+    }
+
+    function guardarEstado(sigla, estado) {
+      localStorage.setItem(`malla-${sigla}`, estado);
+    }
+
+    function toggleEstado(element, sigla) {
+      let current = element.dataset.estado;
+      let index = estados.indexOf(current);
+      index = (index + 1) % estados.length;
+      const nuevoEstado = estados[index];
+
+      element.classList.remove(current);
+      element.classList.add(nuevoEstado);
+      element.dataset.estado = nuevoEstado;
+      element.querySelector(".estado-icon").textContent = simbolos[nuevoEstado];
+      guardarEstado(sigla, nuevoEstado);
+    }
+
+    function renderizarMalla() {
+      const contenedor = document.getElementById("malla");
+      contenedor.innerHTML = "";
+
+      for (const [semestre, ramos] of Object.entries(semestres)) {
+        const section = document.createElement("section");
+        section.className = "col-span-full";
+
+        const titulo = document.createElement("h2");
+        titulo.textContent = `Semestre ${semestre}`;
+        titulo.className = "text-xl font-semibold mt-8 mb-4 text-blue-700";
+        section.appendChild(titulo);
+
+        ramos.forEach(({sigla, nombre, estado: estadoInicial}) => {
+          const estado = cargarEstado(sigla, estadoInicial);
+          const tarjeta = document.createElement("div");
+          tarjeta.classList.add(estado, "p-4", "rounded-lg", "shadow", "cursor-pointer", "hover:shadow-lg", "transition", "duration-300");
+          tarjeta.dataset.estado = estado;
+
+          tarjeta.onclick = () => toggleEstado(tarjeta, sigla);
+
+          tarjeta.innerHTML = `
+            <h3 class="text-lg font-bold text-gray-700">${sigla} - ${nombre}</h3>
+            <p class="mt-2">Estado: <span class="estado-icon">${simbolos[estado]}</span></p>
+          `;
+          section.appendChild(tarjeta);
+        });
+
+        contenedor.appendChild(section);
+      }
+    }
+
+    function resetearMalla() {
+      for (const ramos of Object.values(semestres)) {
+        ramos.forEach(({sigla}) => localStorage.removeItem(`malla-${sigla}`));
+      }
+      renderizarMalla();
+    }
+
+    window.onload = renderizarMalla;
+  </script>
+</body>
+</html>
