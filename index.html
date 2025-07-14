@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Malla ICM USM 2025 - Diseño Moderno</title>
+  <title>Malla ICM USM 2025</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .aprobado { background-color: #a4f5a4; color: #000; }
@@ -12,167 +12,151 @@
   </style>
 </head>
 <body class="bg-gray-100 p-6">
-  <main>
-    <h1 class="text-3xl font-bold mb-6 text-blue-800">Malla Ingeniería Civil Matemática – USM 2025</h1>
-
-    <div class="mb-6 flex gap-6 items-center">
-      <div><span class="inline-block w-4 h-4 bg-[#a4f5a4] mr-2"></span>Aprobado</div>
-      <div><span class="inline-block w-4 h-4 bg-[#aee0f8] mr-2"></span>Desbloqueado</div>
-      <div><span class="inline-block w-4 h-4 bg-[#e5e5e5] mr-2"></span>Bloqueado</div>
-    </div>
-
-    <button onclick="resetearMalla()" class="mb-6 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-      Reiniciar Malla
-    </button>
-
-    <div id="malla" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
-  </main>
+  <h1 class="text-3xl font-bold text-blue-800 mb-4">Malla Ingeniería Civil Matemática – USM 2025</h1>
+  <button onclick="resetearMalla()" class="mb-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Reiniciar Malla</button>
+  <div id="malla" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
 
   <script>
     const semestres = {
       1: [
-        {sigla: "HCW200", nombre: "Inglés 1", estado: "desbloqueado"},
-        {sigla: "EFI200", nombre: "Educación Física 1", estado: "desbloqueado"},
-        {sigla: "IWG400", nombre: "Proyecto Inicial", estado: "desbloqueado"},
-        {sigla: "FIS100", nombre: "Introducción a la Física", estado: "desbloqueado"},
-        {sigla: "MAT070", nombre: "Introducción al Cálculo", estado: "desbloqueado"},
         {sigla: "MAT060", nombre: "Álgebra y Geometría", estado: "desbloqueado"},
+        {sigla: "MAT070", nombre: "Introducción al Cálculo", estado: "desbloqueado"},
+        {sigla: "FIS100", nombre: "Introducción a la Física", estado: "desbloqueado"},
+        {sigla: "IWG400", nombre: "Proyecto Inicial", estado: "desbloqueado"},
+        {sigla: "EFI200", nombre: "Educación Física 1", estado: "desbloqueado"},
+        {sigla: "HCW200", nombre: "Inglés 1", estado: "desbloqueado"},
       ],
       2: [
-        {sigla: "HCW201", nombre: "Inglés 2", estado: "bloqueado"},
-        {sigla: "EFI201", nombre: "Educación Física 2", estado: "bloqueado"},
+        {sigla: "MAT061", nombre: "Álgebra Lineal", estado: "bloqueado", prerreq: ["MAT060"]},
+        {sigla: "MAT071", nombre: "Cálculo en una Variable", estado: "bloqueado", prerreq: ["MAT070"]},
+        {sigla: "FIS110", nombre: "Física General – Mecánica", estado: "bloqueado", prerreq: ["FIS100"]},
         {sigla: "INF129", nombre: "Introducción a la Programación", estado: "desbloqueado"},
-        {sigla: "FIS110", nombre: "Física General – Mecánica", estado: "bloqueado"},
-        {sigla: "MAT071", nombre: "Cálculo en una Variable", estado: "bloqueado"},
-        {sigla: "MAT061", nombre: "Álgebra Lineal", estado: "bloqueado"},
+        {sigla: "EFI201", nombre: "Educación Física 2", estado: "bloqueado", prerreq:["EFI200"]},
+        {sigla: "HCW202", nombre: "Inglés 2", estado: "bloqueado", prerreq: ["HCW200"]},
       ],
       3: [
-        {sigla: "HCW202", nombre: "Inglés 3", estado: "bloqueado"},
-        {sigla: "MAT063", nombre: "Introducción a la Matemática Avanzada", estado: "bloqueado"},
-        {sigla: "FIS120", nombre: "Calor y Ondas", estado: "bloqueado"},
-        {sigla: "MAT081", nombre: "Cálculo de Varias Variables", estado: "bloqueado"},
-        {sigla: "Mat053", nombre: "Ecuaciones Diferenciales Elementales", estado: "bloqueado"},
-        {sigla: "INF136", nombre: "Programación Avanzada en Ciencias", estado: "bloqueado"},
+        {sigla: "MAT081", nombre: "Cálculo de Varias Variables", estado: "bloqueado", prerreq: ["MAT071"]},
+        {sigla: "MAT053", nombre: "Ecuaciones Diferenciales Elementales", estado: "bloqueado", prerreq: ["MAT071"]},
+        {sigla: "INF136", nombre: "Programación Avanzada en Ciencias", estado: "bloqueado", prerreq: ["INF129"]},
+        {sigla: "FIS120", nombre: "Calor y Ondas", estado: "bloqueado", prerreq: ["FIS110"]},
+        {sigla: "MAT063", nombre: "Intro a la Matemática Avanzada", estado: "bloqueado", prerreq: ["MAT061"]},
+        {sigla: "HCW203", nombre: "Inglés 3", estado: "bloqueado", prerreq: ["HCW202"]},
       ],
       4: [
-        {sigla: "ESP101", nombre: "Comunicación Efectiva en Español", estado: "bloqueado"},
-        {sigla: "MAT301", nombre: "Análisis Real", estado: "bloqueado"},
-        {sigla: "MAT302", nombre: "Álgebra Lineal Avanzada", estado: "bloqueado"},
-        {sigla: "MAT303", nombre: "Cálculo Avanzado para Ingeniería", estado: "bloqueado"},
-        {sigla: "FIS201", nombre: "Electricidad y Magnetismo", estado: "bloqueado"},
-        {sigla: "EST101", nombre: "Probabilidad y Estadística", estado: "bloqueado"},
+        {sigla: "MAT064", nombre: "Análisis Real", estado: "bloqueado", prerreq: ["MAT081", "MAT053"]},
+        {sigla: "MAT065", nombre: "Álgebra Lineal Avanzada", estado: "bloqueado", prerreq: ["MAT061"]},
+        {sigla: "MAT066", nombre: "Cálculo Avanzado para Ingeniería", estado: "bloqueado", prerreq: ["MAT081"]},
+        {sigla: "FIS130", nombre: "Electricidad y Magnetismo", estado: "bloqueado", prerreq: ["FIS120"]},
+        {sigla: "MAT154", nombre: "Probabilidad y Estadística", estado: "bloqueado", prerreq: ["MAT071"]},
+        {sigla: "HXW009", nombre: "Comunicación en Español", estado: "bloqueado", prerreq: ["HCW203"]},
       ],
       5: [
-        {sigla: "ADM101", nombre: "Administración y Sostenibilidad Organizacional", estado: "bloqueado"},
-        {sigla: "MAT401", nombre: "Análisis", estado: "bloqueado"},
-        {sigla: "EDE201", nombre: "Ecuaciones Diferenciales y Sistemas Dinámicos", estado: "bloqueado"},
-        {sigla: "MAT402", nombre: "Álgebra y Matemática Discreta", estado: "bloqueado"},
-        {sigla: "OPT101", nombre: "Optimización Lineal", estado: "bloqueado"},
-        {sigla: "COMU201", nombre: "Práctica en Acción Comunitaria", estado: "bloqueado"},
+        {sigla: "MAT074", nombre: "Análisis", estado: "bloqueado", prerreq: ["MAT064","MAT066"]},
+        {sigla: "MAT075", nombre: "Ecuaciones Dif. y Sist. Dinámicos", estado: "bloqueado", prerreq: ["MAT064","MAT066"]},
+        {sigla: "MAT076", nombre: "Álgebra y Matemática Discreta", estado: "bloqueado", prerreq: ["MAT064","MAT066"]},
+        {sigla: "MAT077", nombre: "Optimización Lineal", estado: "bloqueado", prerreq: ["MAT061"]},
+        {sigla: "AUX233", nombre: "Administración y Sostenibilidad", estado: "desbloqueado"},
+        {sigla: "HXW011", nombre: "Práctica Comunitaria", estado: "desbloqueado"},
       ],
       6: [
-        {sigla: "ESP201", nombre: "Comunicación Efectiva", estado: "bloqueado"},
-        {sigla: "ECO201", nombre: "Ingeniería Económica", estado: "bloqueado"},
-        {sigla: "ANI101", nombre: "Análisis Numérico", estado: "bloqueado"},
-        {sigla: "EST201", nombre: "Modelamiento Estadístico", estado: "bloqueado"},
-        {sigla: "MED101", nombre: "Teoría de la Medida", estado: "bloqueado"},
-        {sigla: "OPT201", nombre: "Optimización No Lineal", estado: "bloqueado"},
+        {sigla: "MAT078", nombre: "Análisis Numérico", estado: "bloqueado", prerreq: ["MAT081"]},
+        {sigla: "MAT079", nombre: "Modelamiento Estadístico", estado: "bloqueado", prerreq: ["MAT154"]},
+        {sigla: "MAT080", nombre: "Teoría de la Medida", estado: "bloqueado", prerreq: ["MAT064"]},
+        {sigla: "MAT082", nombre: "Optimización No Lineal", estado: "bloqueado", prerreq: ["MAT077"]},
+        {sigla: "HXW012", nombre: "Comunicación Efectiva", estado: "bloqueado", prerreq: ["HXW011"]},
+        {sigla: "AUX201", nombre: "Ingeniería Económica", estado: "desbloqueado"},
       ],
       7: [
-        {sigla: "HCW401", nombre: "Inglés Disciplinar", estado: "bloqueado"},
-        {sigla: "PROY101", nombre: "Gestión de Preferencias de Proyectos", estado: "bloqueado"},
-        {sigla: "ANI201", nombre: "Análisis Numérico 2", estado: "bloqueado"},
-        {sigla: "MAT501", nombre: "Análisis Funcional", estado: "bloqueado"},
-        {sigla: "LAB101", nombre: "Laboratorio de Modelación 1", estado: "bloqueado"},
-        {sigla: "DAD101", nombre: "Análisis y Ciencia de Datos", estado: "bloqueado"},
+        {sigla: "MAT088", nombre: "Análisis Numérico 2", estado: "bloqueado", prerreq: ["MAT078"]},
+        {sigla: "MAT089", nombre: "Análisis Funcional", estado: "bloqueado", prerreq: ["MAT078"]},
+        {sigla: "MAT090", nombre: "Lab. Modelación 1", estado: "bloqueado", prerreq: ["MAT078", "MAT082"]},
+        {sigla: "MAT091", nombre: "Análisis y Ciencia de Datos", estado: "bloqueado", prerreq: ["MAT079"]},
+        {sigla: "AUX203", nombre: "Gestión de Proyectos", estado: "desbloqueado"},
+        {sigla: "AUX202", nombre: "Inglés Disciplinar", estado: "desbloqueado"},
       ],
       8: [
-        {sigla: "EDP101", nombre: "Ecuaciones Diferenciales Parciales", estado: "bloqueado"},
-        {sigla: "ANI301", nombre: "Análisis Numérico de EDP", estado: "bloqueado"},
-        {sigla: "EST301", nombre: "Inferencia Estadística", estado: "bloqueado"},
-        {sigla: "OPT301", nombre: "Optimización y Control", estado: "bloqueado"},
-        {sigla: "LAB201", nombre: "Laboratorio de Modelación 2", estado: "bloqueado"},
+        {sigla: "MAT141", nombre: "Ecuaciones Dif. Parciales", estado: "bloqueado", prerreq: ["MAT075"]},
+        {sigla: "MAT142", nombre: "Análisis Numérico de EDP", estado: "bloqueado", prerreq: ["MAT091", "MAT075"]},
+        {sigla: "MAT143", nombre: "Inferencia Estadística", estado: "bloqueado", prerreq: ["MAT079"]},
+        {sigla: "MAT144", nombre: "Optimización y Control", estado: "bloqueado", prerreq: ["MAT082"]},
+        {sigla: "MAT145", nombre: "Lab. Modelación 2", estado: "bloqueado", prerreq: ["MAT090"]},
       ],
       9: [
-        {sigla: "ELEC1", nombre: "Electivo 1", estado: "bloqueado"},
-        {sigla: "PROY102", nombre: "Gestión de Preferencias de Innovación", estado: "bloqueado"},
-        {sigla: "ELEC2", nombre: "Electivo 2", estado: "bloqueado"},
-        {sigla: "ELEC3", nombre: "Electivo 3", estado: "bloqueado"},
-        {sigla: "TIT1", nombre: "Proyecto de Titulación – Parte 1", estado: "bloqueado"},
+        {sigla: "AUX223", nombre: "Electivo 1", estado: "desbloqueado"},
+        {sigla: "AUX224", nombre: "Electivo 2", estado: "desbloqueado"},
+        {sigla: "AUX225", nombre: "Electivo 3", estado: "desbloqueado"},
+        {sigla: "AUX217", nombre: "Gestión de Innovación", estado: "bloqueado", prerreq: ["MAT145"]},
+        {sigla: "MAT150", nombre: "Tesis Parte 1", estado: "bloqueado", prerreq: ["MAT145"]},
       ],
       10: [
-        {sigla: "ELEC4", nombre: "Electivo 4", estado: "bloqueado"},
-        {sigla: "EMP101", nombre: "Gestión de Emprendimiento", estado: "bloqueado"},
-        {sigla: "ELEC5", nombre: "Electivo 5", estado: "bloqueado"},
-        {sigla: "ELEC6", nombre: "Electivo 6", estado: "bloqueado"},
-        {sigla: "TIT2", nombre: "Proyecto de Titulación – Parte 2", estado: "bloqueado"},
+        {sigla: "AUX228", nombre: "Electivo 4", estado: "desbloqueado"},
+        {sigla: "AUX229", nombre: "Electivo 5", estado: "desbloqueado"},
+        {sigla: "AUX320", nombre: "Electivo 6", estado: "desbloqueado"},
+        {sigla: "AUX218", nombre: "Gestión de Emprendimiento", estado: "bloqueado", prerreq: ["AUX217"]},
+        {sigla: "MAT450", nombre: "Tesis Parte 2", estado: "bloqueado", prerreq: ["MAT150"]},
       ],
     };
 
     const estados = ["desbloqueado", "aprobado", "bloqueado"];
-    const simbolos = {
-      "desbloqueado": "🟦",
-      "aprobado": "🟩",
-      "bloqueado": "⚪️"
-    };
 
-    function cargarEstado(sigla, defaultEstado) {
-      return localStorage.getItem(`malla-${sigla}`) ?? defaultEstado;
+    function cargarEstado(sigla, estadoInicial) {
+      return localStorage.getItem(`malla-${sigla}`) ?? estadoInicial;
     }
 
     function guardarEstado(sigla, estado) {
       localStorage.setItem(`malla-${sigla}`, estado);
     }
 
-    function toggleEstado(element, sigla) {
-      let current = element.dataset.estado;
-      let index = estados.indexOf(current);
-      index = (index + 1) % estados.length;
-      const nuevoEstado = estados[index];
+    function cumplePrerreq(ramo) {
+      if (!ramo.prerreq) return true;
+      return ramo.prerreq.every(sigla => localStorage.getItem(`malla-${sigla}`) === "aprobado");
+    }
 
-      element.classList.remove(current);
-      element.classList.add(nuevoEstado);
+    function toggleEstado(element, sigla) {
+      const ramo = buscarRamo(sigla);
+      if (ramo.prerreq && !cumplePrerreq(ramo)) return;
+      let index = estados.indexOf(element.dataset.estado);
+      const nuevoEstado = estados[(index + 1) % estados.length];
+      element.classList.replace(element.dataset.estado, nuevoEstado);
       element.dataset.estado = nuevoEstado;
-      element.querySelector(".estado-icon").textContent = simbolos[nuevoEstado];
       guardarEstado(sigla, nuevoEstado);
+      renderizarMalla(); // actualizar dependencias
+    }
+
+    function buscarRamo(sigla) {
+      return Object.values(semestres).flat().find(r => r.sigla === sigla);
     }
 
     function renderizarMalla() {
       const contenedor = document.getElementById("malla");
       contenedor.innerHTML = "";
 
-      for (const [semestre, ramos] of Object.entries(semestres)) {
-        const section = document.createElement("section");
-        section.className = "col-span-full";
-
+      for (const [n, ramos] of Object.entries(semestres)) {
         const titulo = document.createElement("h2");
-        titulo.textContent = `Semestre ${semestre}`;
-        titulo.className = "text-xl font-semibold mt-8 mb-4 text-blue-700";
-        section.appendChild(titulo);
+        titulo.textContent = `Semestre ${n}`;
+        titulo.className = "col-span-full text-xl font-bold text-blue-700 mt-8 mb-4";
+        contenedor.appendChild(titulo);
 
-        ramos.forEach(({sigla, nombre, estado: estadoInicial}) => {
-          const estado = cargarEstado(sigla, estadoInicial);
-          const tarjeta = document.createElement("div");
-          tarjeta.classList.add(estado, "p-4", "rounded-lg", "shadow", "cursor-pointer", "hover:shadow-lg", "transition", "duration-300");
-          tarjeta.dataset.estado = estado;
+        ramos.forEach(ramo => {
+          let estado = cargarEstado(ramo.sigla, ramo.estado);
+          if (estado === "bloqueado" && cumplePrerreq(ramo)) {
+            estado = "desbloqueado";
+            guardarEstado(ramo.sigla, estado);
+          }
 
-          tarjeta.onclick = () => toggleEstado(tarjeta, sigla);
-
-          tarjeta.innerHTML = `
-            <h3 class="text-lg font-bold text-gray-700">${sigla} - ${nombre}</h3>
-            <p class="mt-2">Estado: <span class="estado-icon">${simbolos[estado]}</span></p>
-          `;
-          section.appendChild(tarjeta);
+          const div = document.createElement("div");
+          div.className = `${estado} p-4 rounded shadow hover:shadow-lg transition duration-200 cursor-pointer`;
+          div.dataset.estado = estado;
+          div.onclick = () => toggleEstado(div, ramo.sigla);
+          div.innerHTML = `<h3 class="text-lg font-semibold">${ramo.sigla}</h3><p>${ramo.nombre}</p>`;
+          contenedor.appendChild(div);
         });
-
-        contenedor.appendChild(section);
       }
     }
 
     function resetearMalla() {
-      for (const ramos of Object.values(semestres)) {
-        ramos.forEach(({sigla}) => localStorage.removeItem(`malla-${sigla}`));
-      }
+      for (const ramos of Object.values(semestres))
+        ramos.forEach(r => localStorage.removeItem(`malla-${r.sigla}`));
       renderizarMalla();
     }
 
